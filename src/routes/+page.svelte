@@ -6,7 +6,6 @@
     const getTodos = async ()=>{
         const res = await fetch('api/todos');
         todos = await res.json();
-        return todos;
     }
     const postTodo = async ()=>{
         const res = await fetch('api/todos',{
@@ -21,13 +20,9 @@
 </script>
 <h1>Den store TODO app</h1>
 <Input bind:value={todo.text}></Input>
-<Button on:click={()=>postTodo()}>Make Todo</Button>
-<Button on:click={()=>todos = getTodos()}>Get Todos</Button>
-{JSON.stringify(todos)}
+<Button on:click={postTodo}>Make Todo</Button>
+<Button on:click={getTodos}>Get Todos</Button>
 
-{#await todos}
-    <p>loading...</p>
-{:then todos}
     {#if todos}
     <ul>
         {#each todos as todo (todo.id)}
@@ -35,4 +30,3 @@
         {/each}
     </ul>
     {/if}
-{/await}
