@@ -1,14 +1,16 @@
 import { json } from '@sveltejs/kit';
+import prisma from '$lib/prisma';
 
-const todos = [{id: 1, text: 'Todo 1'}, {id: 2, text: 'Todo 2'}];
 
 export const GET = async (request) => {
+    const todos = await prisma.todo.findMany({
+        include: {author: true}
+    });
     return json(todos);
 }
 
-export const POST = async ({request}) => {
+export const POST = async ({ request }) => {
     const todo = await request.json();
-    todo.id = todos.length + 1;
-    todos.push(todo);
-    return json(todo);
+    const result = await prisma.todo.create({data:todo});
+    return json(result);
 }
